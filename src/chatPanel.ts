@@ -55,3 +55,4 @@ export class ChatPanel {
   public dispose() {
     ChatPanel.currentPanel = undefined;
     this
+  };
