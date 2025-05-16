@@ -77,4 +77,9 @@ Please suggest code improvements or additions at cursor line ${cursorPosition.li
 }
 
 // Called when extension deactivates
-export function deactivate() {}
+export function deactivate() {
+	// Clean up the chat panel if it exists
+	if (ChatPanel.currentPanel) {
+		ChatPanel.currentPanel.dispose();
+	}
+}
