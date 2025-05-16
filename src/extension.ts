@@ -1,26 +1,72 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+// Import VSCode API
 import * as vscode from 'vscode';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+// Import OpenAI client and dotenv to load environment variables
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import { Configuration, OpenAIApi } from "openai";
+
+// Initialize OpenAI client with API key from .env
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+// Called when extension activates
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "nova-ai-assistance" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('nova-ai-assistance.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
+	// Original helloWorld command
+	const helloDisposable = vscode.commands.registerCommand('nova-ai-assistance.helloWorld', () => {
 		vscode.window.showInformationMessage('Hello World from nova-ai!');
 	});
+	context.subscriptions.push(helloDisposable);
 
-	context.subscriptions.push(disposable);
+	// New AI suggestion command
+	const suggestDisposable = vscode.commands.registerCommand('nova-ai-assistance.suggestCode', async () => {
+		const editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			vscode.window.showInformationMessage('Open a file first to use Nova AI!');
+			return;
+		}
+
+		const document = editor.document;
+		const selection = editor.selection;
+		const cursorPosition = selection.active;
+
+		const text = document.getText();
+
+		const prompt = `
+Here is my code:
+${text}
+
+Please suggest code improvements or additions at cursor line ${cursorPosition.line + 1}:
+`;
+
+		try {
+			const response = await openai.createChatCompletion({
+				model: "gpt-4",
+				messages: [{ role: "user", content: prompt }],
+				temperature: 0.2,
+				max_tokens: 512,
+			});
+
+			const aiMessage = response.data.choices[0].message?.content || "No suggestion";
+
+			await editor.edit(editBuilder => {
+				editBuilder.insert(cursorPosition, "\n// Nova AI Suggestion:\n" + aiMessage + "\n");
+			});
+
+			vscode.window.showInformationMessage('Nova AI suggestion inserted!');
+
+		} catch (err) {
+			vscode.window.showErrorMessage('Nova AI error: ' + (err as Error).message);
+		}
+	});
+	context.subscriptions.push(suggestDisposable);
 }
 
-// This method is called when your extension is deactivated
+// Called when extension deactivates
 export function deactivate() {}
