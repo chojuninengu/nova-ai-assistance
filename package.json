@@ -15,6 +15,13 @@
     "commands": [
       {
         "command": "nova-ai-assistance.helloWorld",
+        "command": "nova-ai-assistance.helloWorld",
+        "title": "Nova AI: Hello World"
+      },
+      {
+        "command": "nova-ai-assistance.suggestCode",
+        "title": "Nova AI: Suggest Code"
+      }
         "title": "Hello World"
       }
     ]
@@ -50,4 +57,12 @@
     "dotenv": "^16.5.0",
     "openai": "^4.98.0"
   }
+  
+    "contributes": {
+      "commands": [
+        {
+      ]
+    }
+  
+  
 }
