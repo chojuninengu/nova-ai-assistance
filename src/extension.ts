@@ -21,6 +21,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	console.log('Congratulations, your extension "nova-ai-assistance" is now active!');
 
+	// Show a notification when the extension activates
+	vscode.window.showInformationMessage('Nova AI Assistant is now active! Try running "Nova AI: Open Chat" from the command palette.');
+
 	// Hello World command
 	const helloDisposable = vscode.commands.registerCommand('nova-ai-assistance.helloWorld', () => {
 		vscode.window.showInformationMessage('Hello World from nova-ai!');
