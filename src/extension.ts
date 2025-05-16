@@ -29,8 +29,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 	console.log('Congratulations, your extension "nova-ai-assistance" is now active!');
 
-	// Show a notification when the extension activates
-	vscode.window.showInformationMessage('Nova AI Assistant is now active! Try running "Nova AI: Open Chat" from the command palette.');
+	// Check if OpenAI API key is set
+	if (!process.env.OPENAI_API_KEY) {
+		vscode.window.showErrorMessage('Nova AI Assistant: OpenAI API key is not set. Please add it to your .env file.');
+	} else {
+		// Show a notification when the extension activates
+		vscode.window.showInformationMessage('Nova AI Assistant is now active! Try running "Nova AI: Open Chat" from the command palette.');
+	}
 
 	// Hello World command
 	const helloDisposable = vscode.commands.registerCommand('nova-ai-assistance.helloWorld', () => {
