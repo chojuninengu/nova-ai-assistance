@@ -1,6 +1,3 @@
-import * as dotenv from "dotenv";
-dotenv.config();
-
 // Import VSCode API
 import * as vscode from 'vscode';
 
