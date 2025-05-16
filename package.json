@@ -11,7 +11,8 @@
   ],
   "activationEvents": [
     "onCommand:nova-ai-assistance.helloWorld",
-    "onCommand:nova-ai-assistance.suggestCode"
+    "onCommand:nova-ai-assistance.suggestCode",
+    "onCommand:nova-ai-assistance.openChat"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -23,6 +24,10 @@
       {
         "command": "nova-ai-assistance.suggestCode",
         "title": "Nova AI: Suggest Code"
+      },
+      {
+        "command": "nova-ai-assistance.openChat",
+        "title": "Nova AI: Open Chat"
       }
     ]
   },
