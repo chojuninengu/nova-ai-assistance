@@ -12,9 +12,17 @@ import OpenAI from 'openai';
 import { ChatPanel } from './chatPanel';
 
 // Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let openai: OpenAI;
+try {
+  if (!process.env.OPENAI_API_KEY) {
+    console.error('OPENAI_API_KEY is not set in the environment variables');
+  }
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+} catch (error) {
+  console.error('Failed to initialize OpenAI client:', error);
+}
 
 // Called when extension activates
 export function activate(context: vscode.ExtensionContext) {
