@@ -8,7 +8,8 @@ dotenv.config();
 // Import OpenAI (v4 SDK)
 import OpenAI from 'openai';
 
-
+// Import ChatPanel
+import { ChatPanel } from './chatPanel';
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -67,6 +68,12 @@ Please suggest code improvements or additions at cursor line ${cursorPosition.li
 		}
 	});
 	context.subscriptions.push(suggestDisposable);
+
+	// Open Chat Panel command
+	const chatDisposable = vscode.commands.registerCommand('nova-ai-assistance.openChat', () => {
+		ChatPanel.createOrShow(context.extensionUri);
+	});
+	context.subscriptions.push(chatDisposable);
 }
 
 // Called when extension deactivates
